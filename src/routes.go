@@ -1,8 +1,7 @@
 package src
 
 import (
-	"net/http"
-
+	"github.com/claudeseo/railgun/src/controller"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,11 +10,9 @@ func NewRouter() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	pingController := new(controller.PingController)
+
+	router.GET("/ping", pingController.Ping)
 
 	return router
 }

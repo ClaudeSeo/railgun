@@ -6,13 +6,17 @@ import (
 	"github.com/caarlos0/env"
 )
 
-type Configuration struct {
+type configuration struct {
 	Env  string `env:"ENV" envDefault:"DEVELOPMENT"`
 	Host string `env:"HOST" envDefault:"0.0.0.0"`
 	Port int    `env:"PORT" envDefault:"5000"`
+
+	RedisAddr     string `env:"REDIS_ADDR" envDefault:"localhost:6379"`
+	ReidsPassword string `env:"REDIS_PASSWORD" envDefault:""`
+	RedisDatabase int    `env:"REDIS_DATABASEA" envDefault:"0"`
 }
 
-var cfg Configuration
+var cfg configuration
 
 func Init() {
 	if err := env.Parse(&cfg); err != nil {
@@ -20,6 +24,6 @@ func Init() {
 	}
 }
 
-func GetConfig() Configuration {
+func GetConfig() configuration {
 	return cfg
 }

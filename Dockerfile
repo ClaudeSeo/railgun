@@ -8,7 +8,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN go build
+RUN go build -o railgun main.go
 
 FROM alpine:latest
 
@@ -17,7 +17,7 @@ RUN apk update
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY --from=builder /usr/src/app .
+COPY --from=builder /usr/src/app/railgun .
 
 EXPOSE 8080
 

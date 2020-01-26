@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: railgun-redis
+spec:
+  serviceName: railgun-redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: railgun-redis
+  template:
+    metadata:
+      labels:
+        app: railgun-redis
+    spec:
+      containers:
+        - name: railgun-redis
+          image: redis:5-alpine
+          volumeMounts:
+            - name: railgun-redis-volume-mount
+              mountPath: /data/redis
+      volumes:
+        - name: railgun-redis-volume-mount
+          persistentVolumeClaim:
+            claimName: railgun-redis-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: railgun-redis
+spec:
+  selector:
+    app: railgun-redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: railgun-redis-pv
+spec:
+  capacity:
+    storage: 2Gi
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/redis-cluster-0
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: railgun-redis-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: railgun-redis-pv
+  storageClassName: manual

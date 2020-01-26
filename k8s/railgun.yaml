@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: railgun
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: railgun
+  template:
+    metadata:
+      labels:
+        app: railgun
+    spec:
+      containers:
+        - name: railgun
+          image: railgun:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: railgun
+          env:
+            - name: PORT
+              value: "8080"
+            - name: GIN_MODE
+              value: release
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 29
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 29
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: railgun
+spec:
+  type: NodePort
+  selector:
+    app: railgun
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: railgun
+spec:
+  rules:
+    - host: railgun.local
+      http:
+        paths:
+          - backend:
+              serviceName: railgun
+              servicePort: 8080

@@ -16,14 +16,15 @@ type configuration struct {
 	RedisDatabase int    `env:"REDIS_DATABASEA" envDefault:"0"`
 }
 
-var cfg configuration
+var cfg *configuration
 
 func Init() {
-	if err := env.Parse(&cfg); err != nil {
+	cfg = &configuration{}
+	if err := env.Parse(cfg); err != nil {
 		fmt.Printf("%+v\n", err)
 	}
 }
 
-func GetConfig() configuration {
+func GetConfig() *configuration {
 	return cfg
 }

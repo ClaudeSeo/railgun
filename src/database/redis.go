@@ -18,7 +18,7 @@ func Init() {
 	})
 
 	if _, err := conn.Ping().Result(); err != nil {
-		log.Fatal("Can't Redis Ping", cfg.RedisAddr)
+		log.Fatal("Can't Redis Ping ", cfg.RedisAddr)
 	}
 }
 

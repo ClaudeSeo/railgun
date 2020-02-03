@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/claudeseo/railgun/src"
-	"github.com/claudeseo/railgun/src/config"
-	"github.com/claudeseo/railgun/src/database"
+	"strconv"
+
+	"github.com/claudeseo/railgun/config"
+	"github.com/claudeseo/railgun/database"
+	"github.com/claudeseo/railgun/routes"
 	"github.com/joho/godotenv"
 )
 
@@ -11,5 +13,8 @@ func main() {
 	godotenv.Load()
 	config.Init()
 	database.Init()
-	src.Init()
+	cfg := config.GetConfig()
+	router := routes.Init()
+	endpoint := cfg.Host + ":" + strconv.Itoa(cfg.Port)
+	router.Run(endpoint)
 }

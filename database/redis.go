@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 
-	"github.com/claudeseo/railgun/src/config"
+	"github.com/claudeseo/railgun/config"
 	"github.com/go-redis/redis"
 )
 

@@ -1,4 +1,4 @@
-package controller
+package controllers
 
 import (
 	"crypto/sha1"
@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/claudeseo/railgun/src/database"
+	"github.com/claudeseo/railgun/database"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 )
@@ -62,7 +62,7 @@ func findByHash(h string) *placeUpdateInfo {
 	return &p
 }
 
-func (PlaceController) GetPlace(c *gin.Context) {
+func (ctrl PlaceController) GetPlace(c *gin.Context) {
 	var p place
 	c.ShouldBindQuery(&p)
 

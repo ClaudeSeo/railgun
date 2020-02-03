@@ -1,9 +1,9 @@
-package src
+package routes
 
 import (
 	"net/http"
 
-	"github.com/claudeseo/railgun/src/controller"
+	"github.com/claudeseo/railgun/controllers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,9 +26,9 @@ func notFoundHandler(c *gin.Context) {
 	})
 }
 
-func NewRouter() *gin.Engine {
-	pingController := new(controller.PingController)
-	placeController := new(controller.PlaceController)
+func Init() *gin.Engine {
+	pingController := new(controllers.PingController)
+	placeController := new(controllers.PlaceController)
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(globalRecovery)
